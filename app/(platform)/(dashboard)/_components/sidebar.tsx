@@ -10,14 +10,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Accordion } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { NavItem, Organization } from "./nav-item";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface SidebarProps {
   storageKey?: string;
 }
 
 export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
-  const [expanded, setExpanded] = useState<Record<string, any>>({});
+  const [isMounted, setIsMounted] = useState(false);
+  const [expanded, setExpanded] = useLocalStorage<Record<string, any>>(
+    storageKey,
+    {}
+  );
 
   const { organization: activeOrganization, isLoaded: isLoadedOrg } =
     useOrganization();
@@ -27,6 +31,10 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
       infinite: true,
     },
   });
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const defaultAccordionValue: string[] = Object.keys(expanded).reduce(
     (acc: string[], key: string) => {
@@ -59,6 +67,10 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
         </div>
       </>
     );
+  }
+
+  if (!isMounted) {
+    return null;
   }
 
   return (

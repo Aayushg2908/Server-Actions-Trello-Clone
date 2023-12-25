@@ -4,12 +4,22 @@ import Image from "next/image";
 import { useOrganization } from "@clerk/nextjs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CreditCard } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export const Info = ({ isPro }: { isPro: boolean }) => {
+  const [isMounted, setIsMounted] = useState(false);
   const { organization, isLoaded } = useOrganization();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   if (!isLoaded) {
     return <Info.Skeleton />;
+  }
+
+  if (!isMounted) {
+    return null;
   }
 
   return (
