@@ -10,16 +10,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Accordion } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { NavItem, Organization } from "./nav-item";
+import { useState } from "react";
 
 interface SidebarProps {
   storageKey?: string;
 }
 
 export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
-  const [expanded, setExpanded] = useLocalStorage<Record<string, any>>(
-    storageKey,
-    {}
-  );
+  const [expanded, setExpanded] = useState<Record<string, any>>({});
 
   const { organization: activeOrganization, isLoaded: isLoadedOrg } =
     useOrganization();
